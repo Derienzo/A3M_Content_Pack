@@ -1,10 +1,11 @@
 #include "basicdefines_A3.hpp"
 
+
 class CfgPatches
 {
 	class A3M_CP
 	{
-		units[] = {"A3M_H_Stretcher","A3M_H_Table","A3M_SmallServerRack","A3M_Sofa","A3M_SatDish","A3M_CocaineBrick","A3M_WaterCooler","A3M_Dildo","A3M_WeapLocker"};
+		units[] = {"A3M_Hbed","A3M_H_Table","A3M_SmallServerRack","A3M_Sofa","A3M_SatDish","A3M_CocaineBrick","A3M_WaterCooler","A3M_Dildo","A3M_WeapLocker"};
 		requiredAddons[] = {"A3_Structures_F_Civ_Lamps"}; 
 		weapons[] = {};
 		requiredVersion = 1.00;
@@ -21,7 +22,7 @@ class CfgVehicleClasses
 	
 	class A3M_Med
 	{
-		displayName = "A3M Medical Objects";
+		displayName = "A3M Medical";
 		priority = -1;
 	};
 	
@@ -35,33 +36,80 @@ class CfgVehicleClasses
 
 class cfgVehicles
 {
+	class default {};
+	class LandVehicle : default {};
+	class Car: LandVehicle{} ;
+
+     class A3M_Hbed : Car {   
+	 
+        displayName= "Hospital Stretcher";     // Displayname in editor
+		model= "\A3M_Objects\Models\A3M_Stretcher.p3d"; // our p3d model path
+		icon="iconObject_1x2";
+		picture="iconObject_1x2";
+		vehicleClass =  "A3M_Med";
+		scope	= 2; 			/// makes the car visible in editor
+		scopeCurator=2;			// scope 2 means it's available in Zeus mode (0 means hidden)
+		crew 	= "C_man_1"; 	/// we need someone to fit into the car
+		side	= 3; 			/// civilian car should be on civilian side
+		faction	= CIV_F;
+		Maxspeed = .1;
+		terrainCoef 	= 1; 	/// different surface affects this car more, stick to tarmac
+		turnCoef 		= 1; 	/// should match the wheel turn radius
+		precision 		= 10; 	/// how much freedom has the AI for its internal waypoints - lower number means more precise but slower approach to way
+		brakeDistance 	= 3.0; 	/// how many internal waypoints should the AI plan braking in advance
+		acceleration 	= 15; 	/// how fast acceleration does the AI think the car has
+		
+		fireResistance 	= 15; 	/// lesser protection against fire than tanks
+		armor 			= 32; 	/// just some protection against missiles, collisions and explosions
+		cost			= 50000; /// how likely is the enemy going to target this vehicle
+		
+		transportMaxBackpacks 	= 2; /// just some backpacks fit the trunk by default
+		transportSoldier 		= 1; /// number of cargo except driver
+		castDriverShadow = 1;
+		castCargoShadow = 1;
+		
+		class TransportItems /// some first aid kits in trunk according to safety regulations
+		{
+			class _xx_FirstAidKit
+			{
+				name="FirstAidKit";
+				count=15;
+			};
+			class _xx_Toolkit
+			{
+				name="Toolkit";
+				count=1;
+			};
+			class _xx_Medikit
+			{
+				name="Medikit";
+				count=2;
+			};
+		};
+		
+		driverAction 		= driver_boat01; /// what action is going the driver take inside the vehicle. Non-existent action makes the vehicle inaccessible
+		cargoAction[] 		= {
+			"passenger_injured_medevac_truck03",
+			"passenger_injured_medevac_truck02",
+			"passenger_injured_medevac_truck01",
+		    "passenger_low01" 
+		};
+		getInAction 		= GetInLow; 		/// how does driver look while getting in
+		getOutAction 		= GetOutMedium; 		/// and out
+		cargoGetInAction[] 	= {"GetInLow"}; 	/// and the same for the rest, if the array has fewer members than the count of crew, the last one is used for the rest
+		cargoGetOutAction[] = {"GetOutLow"}; 	/// that means all use the same in this case
+		supplyRadius=5;
+		attendant=1;
+		
+		// Must be kept as fail-safe in case of issue with the function 
+		hiddenSelectionsTextures[]={"\A3\Weapons_F\Data\placeholder_co.paa"};	 /// we could use any texture to cover the car
+		
+	 }; 
+     
+	 
+	
 	class Static;
 	
-	
-		class A3M_H_Stretcher : Static {
-		scope = 2;
-		scopeCurator= public;
-		icon = "iconStaticObject";
-		picture = "pictureStaticObject";
-		model="\A3M_Objects\Models\A3M_Stretcher.p3d";
-		placement = "vertical";
-		vehicleClass =  "A3M_Med";
-		displayName = "Hospital Bed";
-		mapSize = 0.2;
-		animated = False;
-		armor = 20;
-		damageResistance = 0.004;
-		attendant = true;
-		canBeShot = true;
-		ace_dragging_canDrag = 1; // can this object be dragged?; 1 yes, 0 no (0 default)
-        ace_dragging_dragPosition[] = {0,1.2,0}; // Offset of the model from the body while dragging, comparable to the offset in attachTo (It's the same actually)
-        ace_dragging_dragDirection = 0;  // how much degrees is the model rotatated after dragging it (a global setDir after attachTo)
-
-        ace_dragging_canCarry = 1; // can this object be carried?; 1 yes, 0 no (0 default)
-        ace_dragging_carryPosition[] = {0,1.2,0}; // Same as drag, but for carrying objects
-        ace_dragging_carryDirection = 0; // Same as drag, but for carrying objects
-
-		};
 		
 		class A3M_H_Table : Static {
 		scope = 2;
