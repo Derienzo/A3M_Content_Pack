@@ -5,7 +5,7 @@ class CfgPatches
 {
 	class A3M_CP
 	{
-		units[] = {"A3M_Hbed","A3M_H_Table","A3M_SmallServerRack","A3M_Sofa","A3M_SatDish","A3M_CocaineBrick","A3M_WaterCooler","A3M_Dildo","A3M_WeapLocker"};
+		units[] = {"A3M_Hbed","A3M_H_Table", "A3M_MedCabinet", "A3M_MedBox", "A3M_SmallServerRack","A3M_Sofa","A3M_SatDish","A3M_CocaineBrick","A3M_WaterCooler","A3M_Dildo","A3M_WeapLocker"};
 		requiredAddons[] = {"A3_Structures_F_Civ_Lamps"}; 
 		weapons[] = {};
 		requiredVersion = 1.00;
@@ -52,7 +52,6 @@ class cfgVehicles
 		crew 	= "C_man_1"; 	/// we need someone to fit into the car
 		side	= 3; 			/// civilian car should be on civilian side
 		faction	= CIV_F;
-		Maxspeed = .1;
 		terrainCoef 	= 1; 	/// different surface affects this car more, stick to tarmac
 		turnCoef 		= 1; 	/// should match the wheel turn radius
 		precision 		= 10; 	/// how much freedom has the AI for its internal waypoints - lower number means more precise but slower approach to way
@@ -98,8 +97,10 @@ class cfgVehicles
 		getOutAction 		= GetOutMedium; 		/// and out
 		cargoGetInAction[] 	= {"GetInLow"}; 	/// and the same for the rest, if the array has fewer members than the count of crew, the last one is used for the rest
 		cargoGetOutAction[] = {"GetOutLow"}; 	/// that means all use the same in this case
-		supplyRadius=5;
-		attendant=1;
+		
+		#include "physx.hpp"	/// PhysX settings are in a separate file to make this one simple
+		
+		
 		
 		// Must be kept as fail-safe in case of issue with the function 
 		hiddenSelectionsTextures[]={"\A3\Weapons_F\Data\placeholder_co.paa"};	 /// we could use any texture to cover the car
@@ -114,9 +115,10 @@ class cfgVehicles
 		class A3M_H_Table : Static {
 		scope = 2;
 		scopeCurator= public;
-		icon = "iconStaticObject";
-		picture = "pictureStaticObject";
+		icon = "iconObject_1x1";
+		picture = "iconObject_1x1";
 		model="\A3M_Objects\Models\A3M_HTable_Small.p3d";
+		faction	= CIV_F;
 		placement = "vertical";
 		vehicleClass =  "A3M_Med";
 		displayName = "Small Hospital Table";
@@ -125,6 +127,7 @@ class cfgVehicles
 		armor = 200;
 		damageResistance = 0.004;
 		canBeShot = true;
+		// ACE Settings
 		ace_dragging_canDrag = 1; // can this object be dragged?; 1 yes, 0 no (0 default)
         ace_dragging_dragPosition[] = {0,1.2,0}; // Offset of the model from the body while dragging, comparable to the offset in attachTo (It's the same actually)
         ace_dragging_dragDirection = 0;  // how much degrees is the model rotatated after dragging it (a global setDir after attachTo)
@@ -133,13 +136,67 @@ class cfgVehicles
         ace_dragging_carryPosition[] = {0,1.2,0}; // Same as drag, but for carrying objects
         ace_dragging_carryDirection = 0; // Same as drag, but for carrying objects
 		};
+		
+		class A3M_MedCabinet : Static {
+		scope = 2;
+		scopeCurator= public;
+		icon = "iconObject_1x1";
+		picture = "iconObject_1x1";
+		model="\A3M_Objects\Models\A3M_medCabinet.p3d";
+		faction	= CIV_F;
+		placement = "vertical";
+		vehicleClass =  "A3M_Med";
+		displayName = "Medical Supply Cabinet";
+		mapSize = 0.1;
+		animated = False;
+		armor = 200;
+		damageResistance = 0.004;
+		canBeShot = true;
+		// ACE Settings
+		ace_dragging_canDrag = 1; // can this object be dragged?; 1 yes, 0 no (0 default)
+        ace_dragging_dragPosition[] = {0,1.2,0}; // Offset of the model from the body while dragging, comparable to the offset in attachTo (It's the same actually)
+        ace_dragging_dragDirection = 0;  // how much degrees is the model rotatated after dragging it (a global setDir after attachTo)
+
+        ace_dragging_canCarry = 0; // can this object be carried?; 1 yes, 0 no (0 default)
+        ace_dragging_carryPosition[] = {0,1.2,0}; // Same as drag, but for carrying objects
+        ace_dragging_carryDirection = 0; // Same as drag, but for carrying objects
+		
+		};
+		
+		class A3M_MedBox : Static {
+		scope = 2;
+		scopeCurator= public;
+		icon = "iconObject_1x1";
+		picture = "iconObject_1x1";
+		model="\A3M_Objects\Models\A3M_Medbox.p3d";
+		faction	= CIV_F;
+		placement = "vertical";
+		vehicleClass =  "A3M_Med";
+		displayName = "Medical Supply Crate";
+		mapSize = 0.1;
+		animated = False;
+		armor = 200;
+		damageResistance = 0.004;
+		canBeShot = true;
+		
+		// ACE Settings
+		ace_dragging_canDrag = 1; // can this object be dragged?; 1 yes, 0 no (0 default)
+        ace_dragging_dragPosition[] = {0,1.2,0}; // Offset of the model from the body while dragging, comparable to the offset in attachTo (It's the same actually)
+        ace_dragging_dragDirection = 0;  // how much degrees is the model rotatated after dragging it (a global setDir after attachTo)
+
+        ace_dragging_canCarry = 1; // can this object be carried?; 1 yes, 0 no (0 default)
+        ace_dragging_carryPosition[] = {0,1.2,0}; // Same as drag, but for carrying objects
+        ace_dragging_carryDirection = 0; // Same as drag, but for carrying objects
+		
+		};
 	
 		class A3M_SmallServerRack : Static {
 		scope = 2;
 		scopeCurator= public;
-		icon = "iconStaticObject";
-		picture = "pictureStaticObject";
+		icon = "iconObject_1x1";
+		picture = "iconObject_1x1";
 		model="\A3M_Objects\Models\A3M_Server_Rack_1.p3d";
+		faction	= CIV_F;
 		placement = "vertical";
 		vehicleClass =  "A3M_Obj";
 		displayName = "Server Console";
@@ -149,6 +206,7 @@ class cfgVehicles
 		damageResistance = 0.004;
 		canBeShot = true;
 		destrType = "DestructEngine";	// smoke only
+		// ACE Settings
 		ace_dragging_canDrag = 1; // can this object be dragged?; 1 yes, 0 no (0 default)
         ace_dragging_dragPosition[] = {0,1.2,0}; // Offset of the model from the body while dragging, comparable to the offset in attachTo (It's the same actually)
         ace_dragging_dragDirection = 0;  // how much degrees is the model rotatated after dragging it (a global setDir after attachTo)
@@ -161,9 +219,10 @@ class cfgVehicles
 		class A3M_Sofa : Static {
 		scope = 2;
 		scopeCurator= public;
-		icon = "iconStaticObject";
-		picture = "pictureStaticObject";
+		icon = "iconObject_1x1";
+		picture = "iconObject_1x1";
 		model="\A3M_Objects\Models\A3M_Couch.p3d";
+		faction	= CIV_F;
 		placement = "vertical";
 		vehicleClass =  "A3M_Obj";
 		displayName = "Sofa";
@@ -172,6 +231,7 @@ class cfgVehicles
 		armor = 15;
 		damageResistance = 0.004;
 		canBeShot = true;
+		// ACE Settings
 		ace_dragging_canDrag = 1; // can this object be dragged?; 1 yes, 0 no (0 default)
         ace_dragging_dragPosition[] = {0,1.2,0}; // Offset of the model from the body while dragging, comparable to the offset in attachTo (It's the same actually)
         ace_dragging_dragDirection = 0;  // how much degrees is the model rotatated after dragging it (a global setDir after attachTo)
@@ -184,9 +244,10 @@ class cfgVehicles
 		class A3M_SatDish : Static {
 		scope = 2;
 		scopeCurator= public;
-		icon = "iconStaticObject";
-		picture = "pictureStaticObject";
+		icon = "iconObject_1x1";
+		picture = "iconObject_1x1";
 		model="\A3M_Objects\Models\A3M_SatDish.p3d";
+		faction	= CIV_F;
 		placement = "vertical";
 		vehicleClass =  "A3M_Obj";
 		displayName = "Satellite Dish";
@@ -195,6 +256,7 @@ class cfgVehicles
 		armor = 200;
 		damageResistance = 0.004;
 		canBeShot = true;
+		// ACE Settings
 		ace_dragging_canDrag = 1; // can this object be dragged?; 1 yes, 0 no (0 default)
         ace_dragging_dragPosition[] = {0,1.2,0}; // Offset of the model from the body while dragging, comparable to the offset in attachTo (It's the same actually)
         ace_dragging_dragDirection = 0;  // how much degrees is the model rotatated after dragging it (a global setDir after attachTo)
@@ -207,9 +269,10 @@ class cfgVehicles
 		class A3M_CocaineBrick : Static {
 		scope = 2;
 		scopeCurator= public;
-		icon = "iconStaticObject";
-		picture = "pictureStaticObject";
+		icon = "iconObject_1x1";
+		picture = "iconObject_1x1";
 		model="\A3M_Objects\Models\A3M_Cocaine_Brick.p3d";
+		faction	= CIV_F;
 		placement = "vertical";
 		vehicleClass =  "A3M_Obj";
 		displayName = "Cocaine (Kilo Brick)";
@@ -218,6 +281,7 @@ class cfgVehicles
 		armor = 3;
 		damageResistance = 0.004;
 		canBeShot = true;
+		// ACE Settings
 		ace_dragging_canDrag = 1; // can this object be dragged?; 1 yes, 0 no (0 default)
         ace_dragging_dragPosition[] = {0,1.2,0}; // Offset of the model from the body while dragging, comparable to the offset in attachTo (It's the same actually)
         ace_dragging_dragDirection = 0;  // how much degrees is the model rotatated after dragging it (a global setDir after attachTo)
@@ -230,9 +294,10 @@ class cfgVehicles
 		class A3M_WaterCooler : Static {
 		scope = 2;
 		scopeCurator= public;
-		icon = "iconStaticObject";
-		picture = "pictureStaticObject";
+		icon = "iconObject_1x1";
+		picture = "iconObject_1x1";
 		model="\A3M_Objects\Models\A3M_Water_Cooler.p3d";
+		faction	= CIV_F;
 		placement = "vertical";
 		vehicleClass =  "A3M_Obj";
 		displayName = "Water Cooler";
@@ -241,6 +306,7 @@ class cfgVehicles
 		armor = 3;
 		damageResistance = 0.004;
 		canBeShot = true;
+		// ACE Settings
 		ace_dragging_canDrag = 1; // can this object be dragged?; 1 yes, 0 no (0 default)
         ace_dragging_dragPosition[] = {0,1.2,0}; // Offset of the model from the body while dragging, comparable to the offset in attachTo (It's the same actually)
         ace_dragging_dragDirection = 0;  // how much degrees is the model rotatated after dragging it (a global setDir after attachTo)
@@ -253,9 +319,10 @@ class cfgVehicles
 		class A3M_Dildo : Static {
 		scope = 2;
 		scopeCurator= public;
-		icon = "iconStaticObject";
-		picture = "pictureStaticObject";
+		icon = "iconObject_1x1";
+		picture = "iconObject_1x1";
 		model="\A3M_Objects\Models\A3M_dildo.p3d";
+		faction	= CIV_F;
 		placement = "vertical";
 		vehicleClass =  "A3M_Obj";
 		displayName = "Dildo";
@@ -264,6 +331,7 @@ class cfgVehicles
 		armor = 1;
 		damageResistance = 0.004;
 		canBeShot = true;
+		// ACE Settings
 		ace_dragging_canDrag = 1; // can this object be dragged?; 1 yes, 0 no (0 default)
         ace_dragging_dragPosition[] = {0,1.2,0}; // Offset of the model from the body while dragging, comparable to the offset in attachTo (It's the same actually)
         ace_dragging_dragDirection = 0;  // how much degrees is the model rotatated after dragging it (a global setDir after attachTo)
@@ -276,9 +344,10 @@ class cfgVehicles
 		class A3M_WeapLocker : Static {
 		scope = 2;
 		scopeCurator= public;
-		icon = "iconStaticObject";
-		picture = "pictureStaticObject";
+		icon = "iconObject_1x1";
+		picture = "iconObject_1x1";
 		model="\A3M_Objects\Models\A3M_Weapon_Locker.p3d";
+		faction	= CIV_F;
 		placement = "vertical";
 		vehicleClass =  "A3M_Obj";
 		displayName = "Weapon Locker";
@@ -287,6 +356,7 @@ class cfgVehicles
 		armor = 200;
 		damageResistance = 0.004;
 		canBeShot = true;
+		// ACE Settings
 		ace_dragging_canDrag = 1; // can this object be dragged?; 1 yes, 0 no (0 default)
         ace_dragging_dragPosition[] = {0,1.2,0}; // Offset of the model from the body while dragging, comparable to the offset in attachTo (It's the same actually)
         ace_dragging_dragDirection = 0;  // how much degrees is the model rotatated after dragging it (a global setDir after attachTo)
@@ -299,9 +369,10 @@ class cfgVehicles
 		class A3M_ShipA : Static {
 		scope = 2;
 		scopeCurator= public;
-		icon = "iconStaticObject";
-		picture = "pictureStaticObject";
+		icon = "iconObject_1x1";
+		picture = "iconObject_1x1";
 		model="\A3M_Objects\Models\A3M_Ship_A.p3d";
+		faction	= CIV_F;
 		placement = "vertical";
 		vehicleClass =  "A3M_Mari";
 		displayName = "Ship A";
@@ -310,11 +381,12 @@ class cfgVehicles
 		armor = 200;
 		damageResistance = 0.004;
 		canBeShot = true;
-		ace_dragging_canDrag = 1; // can this object be dragged?; 1 yes, 0 no (0 default)
+		// ACE Settings
+		ace_dragging_canDrag = 0; // can this object be dragged?; 1 yes, 0 no (0 default)
         ace_dragging_dragPosition[] = {0,1.2,0}; // Offset of the model from the body while dragging, comparable to the offset in attachTo (It's the same actually)
         ace_dragging_dragDirection = 0;  // how much degrees is the model rotatated after dragging it (a global setDir after attachTo)
 
-        ace_dragging_canCarry = 1; // can this object be carried?; 1 yes, 0 no (0 default)
+        ace_dragging_canCarry = 0; // can this object be carried?; 1 yes, 0 no (0 default)
         ace_dragging_carryPosition[] = {0,1.2,0}; // Same as drag, but for carrying objects
         ace_dragging_carryDirection = 0; // Same as drag, but for carrying objects
 		};
